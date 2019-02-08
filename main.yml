@@ -1,0 +1,10 @@
+---
+  - hosts: all
+    become: yes
+    roles:
+      - apt_update
+    vars:
+      reboot_ok: false
+
+# How to run
+# ansible-playbook -b -u <user> --private-key <path to key> -i hosts -l <host-group> main.yml [--extra-vars reboot_ok=true]

@@ -1,0 +1,26 @@
+---
+
+  - name: Run "apt-get update"
+    apt:
+      update_cache: yes
+
+  - name: Run "apt-get dist-upgrade"
+    apt:
+      upgrade: dist
+
+  - name: Check if reboot is required.
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required
+
+  - debug:
+      msg: "Reboot is required!!!"
+    when: reboot_required.stat.exists == True
+
+  - include_role:
+      name: reboot_host
+    when: reboot_required.stat.exists == True and reboot_ok
+      
+  - name: Run "apt-get autoremove"
+    apt:
+      autoremove: yes

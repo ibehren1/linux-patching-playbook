@@ -1,0 +1,6 @@
+[Dev]
+host01.example.com
+
+[Prod]
+host11.prod.example.com
+host12.prod.example.com
