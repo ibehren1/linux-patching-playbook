@@ -1,0 +1,27 @@
+---
+
+  - name: Ensure yum-utils is installed
+    yum:
+      update_cache: yes
+      state: latest
+      name: 'yum-utils'
+
+  - name: Run "yum update"
+    yum:
+      update_cache: yes
+      state: latest
+      name: '*'
+
+  - name: Check if reboot is required.
+    shell: needs-restarting -r
+    failed_when: false
+    register: reboot_required
+    changed_when: false
+
+  - debug:
+      msg: "Reboot is required!!!"
+    when: reboot_required.rc != 0
+
+  - include_role:
+      name: reboot_host
+    when: reboot_required.rc != 0 and reboot_ok

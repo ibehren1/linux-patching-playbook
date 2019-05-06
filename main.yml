@@ -2,7 +2,11 @@
   - hosts: all
     become: yes
     roles:
-      - apt_update
+      - { role: apt_update, when: ( ansible_distribution == "Ubuntu" ) or
+                                  ( ansible_distribution == "Debian" ) }
+      - { role: yum_update, when: ( ansible_distribution == "CentOS" ) or
+                                  ( ansible_distribution == "Amazon" ) or
+                                  ( ansible_distribution == "RedHat" ) }
     vars:
       reboot_ok: false
 
