@@ -1,10 +1,15 @@
-# Ubuntu Patching Playbook
+# Linux Patching Playbook
 
-Ansible playbook for patching Ubuntu hosts.
+Ansible playbook for patching Ubuntu/Debian/RHEL/CentOS/Amazon Linux hosts.
 
 ### How to run:
 ```
-ansible-playbook -b -u <username> --private-key <path to key> -i hosts -l <host-group> main.yml [--extra-vars reboot_ok=true]
+ansible-playbook main.yml \
+  --private-key <path to key> \
+  -u <username> \
+  -i hosts \
+  -l <host-group> \
+  [--extra-vars reboot_ok=true]
 ```
 
 The playbook does not reboot hosts by default.  
