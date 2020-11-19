@@ -16,7 +16,8 @@
     msg: "Reboot is required!!!"
   when: reboot_required.stat.exists
 
-- include_role:
+- name: Reboot host(s).
+  include_role:
     name: reboot_host
   when: reboot_required.stat.exists and reboot_ok
 
