@@ -1,0 +1,59 @@
+---
+- name: Install Chronyd
+  package:
+    name: chrony
+    state: present
+
+- name: Remove pools from /etc/chrony/chrony.conf (Amazon/CentOS/RedHat)
+  lineinfile:
+    path: /etc/chrony.conf
+    regexp: "^pool "
+    state: absent
+  when: ( ansible_distribution == "CentOS" ) or
+    ( ansible_distribution == "Amazon" ) or
+    ( ansible_distribution == "RedHat" )
+
+- name: Place servers in /etc/chrony/chrony.conf (Amazon/CentOS/RedHat)
+  lineinfile:
+    path: /etc/chrony.conf
+    line: "{{ item }}"
+  with_items:
+    - "server ubudns01.iac.lan iburst"
+    - "server ubudns02.iac.lan iburst"
+  when: ( ansible_distribution == "CentOS" ) or
+    ( ansible_distribution == "Amazon" ) or
+    ( ansible_distribution == "RedHat" )
+
+- name: Remove pools from /etc/chrony/chrony.conf (Ubuntu)
+  lineinfile:
+    path: /etc/chrony/chrony.conf
+    regexp: "^pool "
+    state: absent
+  when: ( ansible_distribution == "Ubuntu" ) or ( ansible_distribution == "Debian" )
+
+- name: Place servers in /etc/chrony/chrony.conf (Ubuntu)
+  lineinfile:
+    path: /etc/chrony/chrony.conf
+    line: "{{ item }}"
+  with_items:
+    - "server ubudns01.iac.lan iburst"
+    - "server ubudns02.iac.lan iburst"
+  when: ( ansible_distribution == "Ubuntu" ) or ( ansible_distribution == "Debian" )
+
+- name: Restart Chronyd Service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: chrony
+  when: ( ansible_distribution == "Ubuntu" ) or ( ansible_distribution == "Debian" )
+
+- name: Restart Chronyd Service (Amazon/CentOS/RedHat)
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: chronyd
+  when: ( ansible_distribution == "CentOS" ) or
+    ( ansible_distribution == "Amazon" ) or
+    ( ansible_distribution == "RedHat" )

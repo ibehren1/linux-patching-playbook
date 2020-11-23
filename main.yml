@@ -1,14 +1,14 @@
 ---
-  - hosts: all
-    become: yes
-    roles:
-      - { role: apt_update, when: ( ansible_distribution == "Ubuntu" ) or
-                                  ( ansible_distribution == "Debian" ) }
-      - { role: yum_update, when: ( ansible_distribution == "CentOS" ) or
-                                  ( ansible_distribution == "Amazon" ) or
-                                  ( ansible_distribution == "RedHat" ) }
-    vars:
-      reboot_ok: false
-
+- hosts: all
+  become: yes
+  roles:
+    - { role: apt_update, when: ( ansible_distribution == "Ubuntu" ) or
+          ( ansible_distribution == "Debian" ) }
+    - { role: yum_update, when: ( ansible_distribution == "CentOS" ) or
+          ( ansible_distribution == "Amazon" ) or
+          ( ansible_distribution == "RedHat" ) }
+    - { role: chrony, when: config_chrony }
+  vars:
+    reboot_ok: False
 # How to run
 # ansible-playbook -b -u <user> --private-key <path to key> -i hosts -l <host-group> main.yml [--extra-vars reboot_ok=true]
